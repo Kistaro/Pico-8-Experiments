@@ -23,11 +23,14 @@ end
 -- sprite rotation code
 -- stolen from a bbs post
 -- angle is fractional circle
+--  ...as fractional part of n
 -- https://www.lexaloffle.com/bbs/?tid=2189
-function spra(angle,n,x,y,w,h,flip_x,flip_y)
+function spra(n,x,y,w,h,flip_x,flip_y)
  if w==nil or h==nil then
   w,h=1,1
  end
+ local angle = n - flr(n)
+ n = flr(n)
  w*=8
  h*=8
  local diag,w,h=flr(sqrt(w*w+h*h))/2,w/2,h/2
@@ -45,6 +48,37 @@ function spra(angle,n,x,y,w,h,flip_x,flip_y)
   end
  end
 end
+
+-- given a value in id.rotation
+-- format, rotate by given
+-- angle (circle fraction)
+-- without changing sprite id
+function rot_val(sr, ra)
+  local sx = sr + ra
+  local dx = flr(sx) - flr(sr)
+  return sx - dx
+end
+
+-- where do we draw the board?
+board_info = {
+ x = 0,
+ y = 0,
+}
+
+-- prototype: a cell
+cell_type = {
+ row = 0,  --relative to board
+ col = 0,
+ typ = 38.0, --sprite id.rot
+ mark = 0.0, --sprite id.rot
+ ans = 0.0,  --sprite id.rot
+}
+
+--todo: a constructor for cells
+--automatic checkerboarding?
+--define edge cells, too
+--then draw it
+--worry about gameplay later
 __gfx__
 5555555555555555ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 5ffffffffffffff5fffffffbbffffffffffffffaafffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
